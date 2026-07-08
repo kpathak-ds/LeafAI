@@ -3,3 +3,7 @@ __pycache__/
 .vscode/
 .ipynb_checkpoints/
 PlantVillage/
+.DS_Store
+.agents/
+scratch/
+ui-ux-pro-max-skill*
