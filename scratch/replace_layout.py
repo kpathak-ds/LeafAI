@@ -5,7 +5,7 @@ with open("app.py", "r", encoding="utf-8") as f:
     content = f.read()
 
 # Define the new block to insert
-new_block = """elif active_tab == "🔍 Crop Analysis":
+new_block = '''elif active_tab == ":material/microscope: Crop Analysis":
     # Fetch variables from state if already analyzed
     if st.session_state.uploaded_img_data is not None:
         img_array = st.session_state.uploaded_img_data
@@ -349,11 +349,11 @@ new_block = """elif active_tab == "🔍 Crop Analysis":
                 <h4 style="margin-top:10px; color:var(--text-primary); font-family:'Space Grotesk',sans-serif;">Awaiting Crop Specimen</h4>
                 <p style="font-size:0.8rem; color:var(--text-secondary); margin:3px 0 0 0;">Upload crop leaf image to run diagnostics.</p>
             </div>
-            """, unsafe_allow_html=True)"""
+            """, unsafe_allow_html=True)'''
 
 # Perform replacement using regex
 pattern = re.compile(
-    r'elif active_tab == "🔍 Crop Analysis":.*?(?=elif active_tab == "🌿 Plant Health":)',
+    r'elif active_tab == ":material/microscope: Crop Analysis":.*?(?=elif active_tab == ":material/spa: Plant Health":)',
     re.DOTALL
 )
 
