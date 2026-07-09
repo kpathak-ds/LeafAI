@@ -1440,7 +1440,7 @@ elif active_tab == ":material/spa: Plant Health":
             st.markdown("<div class='agri-card'>Please upload a leaf specimen in the Crop Analysis panel first.</div>", unsafe_allow_html=True)
             
     with col_g2:
-        st.markdown('<p class="section-header"><span class="material-symbols-outlined">legend_toggle</span> Canopy Absorption Curve (Seasonal)</p>', unsafe_allow_html=True)
+        st.markdown('<p class="section-header"><span class="material-symbols-outlined">timeline</span> Canopy Absorption Curve (Seasonal)</p>', unsafe_allow_html=True)
         dates = pd.date_range(start="2026-07-01", periods=10)
         c_curve = pd.DataFrame({"Chloroplast Activity (%)": [80.5, 81.2, 83.4, 85.0, 84.1, 82.2, 81.5, 80.0, 79.4, 82.0]}, index=dates)
         st.area_chart(c_curve)
@@ -1497,7 +1497,7 @@ elif active_tab == ":material/science: Vegetation Indices":
 elif active_tab == ":material/shield_alert: Disease Detection":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">shield_alert</span> Pathogen Diagnostics & Severity Analysis</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">warning</span> Pathogen Diagnostics & Severity Analysis</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Deep neural classification pinpointing leaf blights, chemical fungicides, and organic recipes.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1521,7 +1521,7 @@ elif active_tab == ":material/shield_alert: Disease Detection":
 elif active_tab == ":material/legend_toggle: Growth Analysis":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">legend_toggle</span> Crop Growth Lifecycle Timeline</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">timeline</span> Crop Growth Lifecycle Timeline</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Chronological stage diagnostics and canopy nutrient tracking records.</p>
     </div>
     """, unsafe_allow_html=True)
