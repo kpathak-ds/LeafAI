@@ -408,29 +408,25 @@ for lkey in ["मराठी (Marathi)", "తెలుగు (Telugu)", "தம
 # ── Function to draw radial progress ring SVG ─────────────
 def draw_radial_gauge(val, label, status_label, bar_color):
     offset = 502 - (502 * (val / 100))
-    svg = f"""
-    <div style="text-align: center; width: 100%;">
-        <svg width="180" height="180" viewBox="0 0 200 200" style="margin: 0 auto; display: block;">
-            <defs>
-                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#2E7D32" />
-                    <stop offset="100%" stop-color="{bar_color}" />
-                </linearGradient>
-            </defs>
-            <!-- Background track -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="12" />
-            <!-- Active progress ring -->
-            <circle cx="100" cy="100" r="80" fill="none" stroke="url(#gaugeGrad)" stroke-width="12"
-                    stroke-dasharray="502" stroke-dashoffset="{offset}" stroke-linecap="round"
-                    transform="rotate(-90 100 100)" style="transition: stroke-dashoffset 1s ease-out;" />
-            <!-- Centered value -->
-            <text x="100" y="105" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="34" fill="var(--text-primary)">{val}%</text>
-            <!-- Centered status label -->
-            <text x="100" y="132" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="10" fill="{bar_color}" letter-spacing="1.5" style="text-transform: uppercase;">{status_label}</text>
-        </svg>
-        <p style="font-size:0.75rem; color:var(--text-secondary); margin-top:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">{label}</p>
-    </div>
-    """
+    svg = (
+        f'<div style="text-align: center; width: 100%;">'
+        f'<svg width="180" height="180" viewBox="0 0 200 200" style="margin: 0 auto; display: block;">'
+        f'<defs>'
+        f'<linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="100%">'
+        f'<stop offset="0%" stop-color="#2E7D32" />'
+        f'<stop offset="100%" stop-color="{bar_color}" />'
+        f'</linearGradient>'
+        f'</defs>'
+        f'<circle cx="100" cy="100" r="80" fill="none" stroke="rgba(0,0,0,0.03)" stroke-width="12" />'
+        f'<circle cx="100" cy="100" r="80" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" '
+        f'stroke-dasharray="502" stroke-dashoffset="{offset}" stroke-linecap="round" '
+        f'transform="rotate(-90 100 100)" style="transition: stroke-dashoffset 1s ease-out;" />'
+        f'<text x="100" y="105" text-anchor="middle" font-family="\'Space Grotesk\', sans-serif" font-weight="700" font-size="34" fill="var(--text-primary)">{val}%</text>'
+        f'<text x="100" y="132" text-anchor="middle" font-family="\'Plus Jakarta Sans\', sans-serif" font-weight="700" font-size="10" fill="{bar_color}" letter-spacing="1.5" style="text-transform: uppercase;">{status_label}</text>'
+        f'</svg>'
+        f'<p style="font-size:0.75rem; color:var(--text-secondary); margin-top:10px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">{label}</p>'
+        f'</div>'
+    )
     return svg
 
 # Helper function to get status details
@@ -1331,11 +1327,7 @@ elif active_tab == "🔍 Crop Analysis":
                 info["status"],
                 info["bar_color"]
             )
-            st.markdown(f"""
-            <div class="agri-card" style="margin-top:20px; display:flex; justify-content:center; align-items:center; flex-direction:column; padding:25px;">
-                {radial_svg}
-            </div>
-            """, unsafe_allow_html=True)
+            st.markdown(f"<div class='agri-card' style='margin-top:20px; display:flex; justify-content:center; align-items:center; flex-direction:column; padding:25px;'>{radial_svg}</div>", unsafe_allow_html=True)
 
             # Nutrient deficiency analysis grid
             if "Nitrogen" in meta["disease"]:
