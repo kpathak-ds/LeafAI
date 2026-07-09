@@ -1103,71 +1103,78 @@ elif active_tab == "🔍 Crop Analysis":
             
         final_uploaded = uploaded_file if uploaded_file else camera_image
 
-        if final_uploaded is not None:
-            # Specimen analysis & caching
-            image = Image.open(final_uploaded).convert("RGB")
-            img_array = np.array(image)
-            
-            if st.session_state.uploaded_img_data is None or not np.array_equal(st.session_state.uploaded_img_data, img_array):
-                with st.spinner(""):
-                    p = st.progress(0, text=t["prog_preprocess"])
-                    time.sleep(0.3)
-                    p.progress(35, text=t["prog_indices"])
-                    processed = preprocess(img_array)
-                    time.sleep(0.3)
-                    p.progress(65, text=t["prog_model"])
-                    
-                    if keras_model is not None:
-                        pred = keras_model.predict(processed, verbose=0)[0][0]
-                        efficiency_pct = round(float(pred) * 100, 1)
-                    else:
-                        norm_img = img_array.astype(np.float32) / 255.0
-                        R = norm_img[:,:,0]; G = norm_img[:,:,1]; B = norm_img[:,:,2]
-                        vari_mean = float(np.mean(np.clip((G - R) / (G + R - B + 1e-5), -1, 1)))
-                        efficiency_pct = round(50.0 + (vari_mean * 40.0) + np.random.uniform(-5, 5), 1)
-                        efficiency_pct = min(100.0, max(0.0, efficiency_pct))
+        # Show analysis results if active upload or cached data exists
+        has_data = (final_uploaded is not None) or (st.session_state.uploaded_img_data is not None)
+        
+        if has_data:
+            if final_uploaded is not None:
+                # Specimen analysis & caching
+                image = Image.open(final_uploaded).convert("RGB")
+                img_array = np.array(image)
+                
+                if st.session_state.uploaded_img_data is None or not np.array_equal(st.session_state.uploaded_img_data, img_array):
+                    with st.spinner(""):
+                        p = st.progress(0, text=t["prog_preprocess"])
+                        time.sleep(0.3)
+                        p.progress(35, text=t["prog_indices"])
+                        processed = preprocess(img_array)
+                        time.sleep(0.3)
+                        p.progress(65, text=t["prog_model"])
                         
-                    p.progress(90, text=t["prog_report"])
-                    meta, cropped = analyze_image(img_array)
-                    
-                    gradcam, shap_overlay, attention, heatmap = generate_xai_maps(img_array)
-                    
-                    p.progress(100, text=t["prog_complete"])
-                    time.sleep(0.2)
-                    p.empty()
-                    
-                    st.session_state.uploaded_img_data = img_array
-                    st.session_state.efficiency_pct = efficiency_pct
-                    st.session_state.meta = meta
-                    st.session_state.gradcam = gradcam
-                    st.session_state.shap_overlay = shap_overlay
-                    st.session_state.attention = attention
-                    st.session_state.heatmap = heatmap
-                    
-                    # Record diagnostic log
-                    new_rec = {
-                        "crop": meta["crop"],
-                        "disease": meta["disease"],
-                        "severity": meta["severity"],
-                        "efficiency": efficiency_pct,
-                        "date": time.strftime("%Y-%m-%d %I:%M %p"),
-                        "confidence": meta["confidence"],
-                        "indices": {
-                            "VARI": float(np.mean(calculate_indices(img_array.astype(np.float32)/255.0)[:,:,0])),
-                            "ExG": float(np.mean(calculate_indices(img_array.astype(np.float32)/255.0)[:,:,1])),
-                            "MGRVI": float(np.mean(calculate_indices(img_array.astype(np.float32)/255.0)[:,:,2]))
+                        if keras_model is not None:
+                            pred = keras_model.predict(processed, verbose=0)[0][0]
+                            efficiency_pct = round(float(pred) * 100, 1)
+                        else:
+                            norm_img = img_array.astype(np.float32) / 255.0
+                            R = norm_img[:,:,0]; G = norm_img[:,:,1]; B = norm_img[:,:,2]
+                            vari_mean = float(np.mean(np.clip((G - R) / (G + R - B + 1e-5), -1, 1)))
+                            efficiency_pct = round(50.0 + (vari_mean * 40.0) + np.random.uniform(-5, 5), 1)
+                            efficiency_pct = min(100.0, max(0.0, efficiency_pct))
+                            
+                        p.progress(90, text=t["prog_report"])
+                        meta, cropped = analyze_image(img_array)
+                        
+                        gradcam, shap_overlay, attention, heatmap = generate_xai_maps(img_array)
+                        
+                        p.progress(100, text=t["prog_complete"])
+                        time.sleep(0.2)
+                        p.empty()
+                        
+                        st.session_state.uploaded_img_data = img_array
+                        st.session_state.efficiency_pct = efficiency_pct
+                        st.session_state.meta = meta
+                        st.session_state.gradcam = gradcam
+                        st.session_state.shap_overlay = shap_overlay
+                        st.session_state.attention = attention
+                        st.session_state.heatmap = heatmap
+                        
+                        # Record diagnostic log
+                        new_rec = {
+                            "crop": meta["crop"],
+                            "disease": meta["disease"],
+                            "severity": meta["severity"],
+                            "efficiency": efficiency_pct,
+                            "date": time.strftime("%Y-%m-%d %I:%M %p"),
+                            "confidence": meta["confidence"],
+                            "indices": {
+                                "VARI": float(np.mean(calculate_indices(img_array.astype(np.float32)/255.0)[:,:,0])),
+                                "ExG": float(np.mean(calculate_indices(img_array.astype(np.float32)/255.0)[:,:,1])),
+                                "MGRVI": float(np.mean(calculate_indices(img_array.astype(np.float32)/255.0)[:,:,2]))
+                            }
                         }
-                    }
-                    st.session_state.history_list.append(new_rec)
-                    st.toast("🌱 Analysis complete!")
-                    st.rerun()
-                    
+                        st.session_state.history_list.append(new_rec)
+                        st.toast("🌱 Analysis complete!")
+                        st.rerun()
+            
+            # Retrieve from cache
+            img_array = st.session_state.uploaded_img_data
             efficiency_pct = st.session_state.efficiency_pct
             meta = st.session_state.meta
             gradcam = st.session_state.gradcam
             shap_overlay = st.session_state.shap_overlay
             attention = st.session_state.attention
             heatmap = st.session_state.heatmap
+            image = Image.fromarray(img_array)
             
             # Calculate mean indices for exporting
             norm_img = img_array.astype(np.float32) / 255.0
@@ -1179,7 +1186,10 @@ elif active_tab == "🔍 Crop Analysis":
             info = get_health_info(efficiency_pct, lang)
             
             # File specs for preview card
-            file_size_kb = len(final_uploaded.getvalue()) / 1024.0 if hasattr(final_uploaded, "getvalue") else 128.0
+            if final_uploaded is not None and hasattr(final_uploaded, "getvalue"):
+                file_size_kb = len(final_uploaded.getvalue()) / 1024.0
+            else:
+                file_size_kb = len(img_array.tobytes()) / 1024.0 / 10.0  # Consistent scale
             img_res = f"{img_array.shape[1]}x{img_array.shape[0]}"
             
             # Image Preview Card
