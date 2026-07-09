@@ -465,7 +465,7 @@ def get_health_info(eff_pct, lang):
 if 'theme_mode' not in st.session_state:
     st.session_state.theme_mode = "Light Mode"
 if 'active_tab' not in st.session_state:
-    st.session_state.active_tab = "🔍 Crop Analysis"
+    st.session_state.active_tab = ":material/microscope: Crop Analysis"
 if 'xai_tab' not in st.session_state:
     st.session_state.xai_tab = "Original"
 
@@ -516,9 +516,26 @@ else:
 
 custom_css = f"""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
     
     {css_theme_vars}
+
+    .material-symbols-outlined {{
+        font-family: 'Material Symbols Outlined' !important;
+        font-weight: normal;
+        font-style: normal;
+        font-size: inherit;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        vertical-align: middle;
+        margin-right: 8px;
+    }}
 
     * {{
         font-family: 'Plus Jakarta Sans', sans-serif;
@@ -862,7 +879,7 @@ with st.sidebar:
     # Title
     st.markdown("""
     <div style='text-align: center; padding: 10px 0;'>
-        <h1 style='font-family: "Space Grotesk", sans-serif; font-size: 2.1rem; font-weight: 700; color: #00ff66; margin: 0; text-shadow: 0 0 20px rgba(0,255,102,0.4);'>🌿 LeafHealth</h1>
+        <h1 style='font-family: "Space Grotesk", sans-serif; font-size: 2.1rem; font-weight: 700; color: #00ff66; margin: 0; text-shadow: 0 0 20px rgba(0,255,102,0.4);'><span class="material-symbols-outlined" style="font-size: 2.3rem; color: #00ff66; vertical-align: middle; margin-right: 6px;">eco</span>LeafHealth</h1>
         <p style='font-family: "Plus Jakarta Sans", sans-serif; font-size: 0.85rem; color: #8da090; margin-top: 5px; text-transform: uppercase; letter-spacing: 2px;'>Enterprise AI Platform</p>
     </div>
     """, unsafe_allow_html=True)
@@ -882,16 +899,16 @@ with st.sidebar:
 
     # 10-Way Radio Navigation
     TABS = [
-        "📊 Dashboard",
-        "🔍 Crop Analysis",
-        "🌿 Plant Health",
-        "🧪 Vegetation Indices",
-        "🚨 Disease Detection",
-        "📈 Growth Analysis",
-        "🧠 AI Explainability",
-        "📋 Reports & Export",
-        "📜 Diagnostic History",
-        "⚙️ Settings & Help"
+        ":material/dashboard: Dashboard",
+        ":material/microscope: Crop Analysis",
+        ":material/spa: Plant Health",
+        ":material/science: Vegetation Indices",
+        ":material/shield_alert: Disease Detection",
+        ":material/legend_toggle: Growth Analysis",
+        ":material/visibility: AI Explainability",
+        ":material/article: Reports & Export",
+        ":material/history: Diagnostic History",
+        ":material/settings: Settings & Help"
     ]
     
     def on_nav_change():
@@ -940,10 +957,10 @@ if 'history_list' not in st.session_state:
 
 # ── Dynamic Tab Dispatching ──────────────────────────────
 
-if active_tab == "📊 Dashboard":
+if active_tab == ":material/dashboard: Dashboard":
     st.markdown(f"""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0;">📊 Precision Operations Dashboard</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0;"><span class="material-symbols-outlined">dashboard</span> Precision Operations Dashboard</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Real-time farm canopy diagnostic indices, sector moisture reports, and neural diagnostic summary logs.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -996,7 +1013,7 @@ if active_tab == "📊 Dashboard":
         # Columns for visual graphs
         g_col1, g_col2 = st.columns(2)
         with g_col1:
-            st.markdown('<p class="section-header">📈 Weekly Photosynthetic Variance</p>', unsafe_allow_html=True)
+            st.markdown('<p class="section-header"><span class="material-symbols-outlined">analytics</span> Weekly Photosynthetic Variance</p>', unsafe_allow_html=True)
             dates = pd.date_range(start="2026-07-01", periods=10)
             
             # Dynamic weekly variance ending at the current efficiency percentage
@@ -1022,7 +1039,7 @@ if active_tab == "📊 Dashboard":
             st.line_chart(health_history)
             
         with g_col2:
-            st.markdown('<p class="section-header">🧬 Foliar Deficiency Levels by Sector</p>', unsafe_allow_html=True)
+            st.markdown('<p class="section-header"><span class="material-symbols-outlined">science</span> Foliar Deficiency Levels by Sector</p>', unsafe_allow_html=True)
             
             # Dynamic deficiency calculations
             n_val, p_val, k_val, iron_val = (32, 85, 82, 78) if "Nitrogen" in meta["disease"] else (80, 82, 28, 90) if "Potassium" in meta["disease"] else (92, 88, 85, 90)
@@ -1035,7 +1052,7 @@ if active_tab == "📊 Dashboard":
     else:
         st.markdown("<div class='agri-card'>Please upload a leaf specimen in the Crop Analysis panel first.</div>", unsafe_allow_html=True)
 
-elif active_tab == "🔍 Crop Analysis":
+elif active_tab == ":material/microscope: Crop Analysis":
     # Fetch variables from state if already analyzed
     if st.session_state.uploaded_img_data is not None:
         img_array = st.session_state.uploaded_img_data
@@ -1080,7 +1097,7 @@ elif active_tab == "🔍 Crop Analysis":
 
     with col_left:
         # File Specimen Upload Area
-        st.markdown(f'<p class="section-header">📤 {t["upload_header"]}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="section-header"><span class="material-symbols-outlined">upload</span> {t["upload_header"]}</p>', unsafe_allow_html=True)
         
         st.markdown("""
         <div class="agri-upload-hero">
@@ -1189,7 +1206,7 @@ elif active_tab == "🔍 Crop Analysis":
             img_res = f"{img_array.shape[1]}x{img_array.shape[0]}"
             
             # Image Preview Card
-            st.markdown(f'<p class="section-header">📷 {t["leaf_img_header"]}</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="section-header"><span class="material-symbols-outlined">camera</span> {t["leaf_img_header"]}</p>', unsafe_allow_html=True)
             st.image(image, use_container_width=True)
             
             # Metadata Grid List
@@ -1205,7 +1222,7 @@ elif active_tab == "🔍 Crop Analysis":
             """, unsafe_allow_html=True)
 
             # Explainable AI View switcher
-            st.markdown('<p class="section-header">🧠 Explainable Neural Overlay</p>', unsafe_allow_html=True)
+            st.markdown('<p class="section-header"><span class="material-symbols-outlined">visibility</span> Explainable Neural Overlay</p>', unsafe_allow_html=True)
             xai_tab_sel = st.selectbox(
                 "Select XAI Filter Layer",
                 ["Original Specimen", "Grad-CAM Hotspot", "SHAP Feature Boundaries", "Foliar Attention Map", "Colormap Jet Contours"],
@@ -1243,7 +1260,7 @@ elif active_tab == "🔍 Crop Analysis":
 
     with col_right:
         # ── Right Column: Diagnostic Summary and Meters ──────
-        st.markdown(f'<p class="section-header">🌿 Diagnostic Summary & Diagnostics</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="section-header"><span class="material-symbols-outlined">spa</span> Diagnostic Summary & Diagnostics</p>', unsafe_allow_html=True)
         
         if st.session_state.uploaded_img_data is not None:
             # Main health centerpiece header summary card
@@ -1285,7 +1302,7 @@ elif active_tab == "🔍 Crop Analysis":
             
             st.markdown(f"""
             <div class="agri-card" style="margin-top:20px;">
-                <h4 style="margin-top:0; color:var(--primary-green); font-size:1.05rem;">🌾 Crop Identification</h4>
+                <h4 style="margin-top:0; color:var(--primary-green); font-size:1.05rem;"><span class="material-symbols-outlined">grass</span> Crop Identification</h4>
                 <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
                     <div style="font-size:2rem;">🌾</div>
                     <div>
@@ -1339,7 +1356,7 @@ elif active_tab == "🔍 Crop Analysis":
                 
             st.markdown(f"""
             <div class="agri-card" style="margin-top:20px;">
-                <h4 style="margin-top:0; color:var(--primary-green); font-size:1.05rem; margin-bottom:12px;">🧪 Canopy Nutrient Deficiency Index</h4>
+                <h4 style="margin-top:0; color:var(--primary-green); font-size:1.05rem; margin-bottom:12px;"><span class="material-symbols-outlined">science</span> Canopy Nutrient Deficiency Index</h4>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <div style="background:var(--bg-secondary); padding:10px; border-radius:10px;">
                         <span style="font-size:0.7rem; color:var(--text-secondary);">Nitrogen (N)</span>
@@ -1377,7 +1394,7 @@ elif active_tab == "🔍 Crop Analysis":
             st.markdown(timeline_html, unsafe_allow_html=True)
 
             # ── Recommendations Detail Panel ───────────────────────
-            st.markdown(f'<p class="section-header">💡 AI Corrective Recommendations</p>', unsafe_allow_html=True)
+            st.markdown(f'<p class="section-header"><span class="material-symbols-outlined">lightbulb</span> AI Corrective Recommendations</p>', unsafe_allow_html=True)
             st.markdown(f"""
             <div class="agri-card" style="margin-bottom:12px; border-left:4px solid var(--primary-green);">
                 <span style="font-size:0.75rem; color:var(--text-secondary); font-weight:700; text-transform:uppercase;">Agronomic Description</span>
@@ -1403,10 +1420,10 @@ elif active_tab == "🔍 Crop Analysis":
             </div>
             """, unsafe_allow_html=True)
 
-elif active_tab == "🌿 Plant Health":
+elif active_tab == ":material/spa: Plant Health":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">🌿 Photosynthetic Capacity & Canopy Health</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">spa</span> Photosynthetic Capacity & Canopy Health</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Deep-dive diagnostics analyzing chloroplast activation levels and foliage energy transformation rates.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1423,15 +1440,15 @@ elif active_tab == "🌿 Plant Health":
             st.markdown("<div class='agri-card'>Please upload a leaf specimen in the Crop Analysis panel first.</div>", unsafe_allow_html=True)
             
     with col_g2:
-        st.markdown('<p class="section-header">📈 Canopy Absorption Curve (Seasonal)</p>', unsafe_allow_html=True)
+        st.markdown('<p class="section-header"><span class="material-symbols-outlined">legend_toggle</span> Canopy Absorption Curve (Seasonal)</p>', unsafe_allow_html=True)
         dates = pd.date_range(start="2026-07-01", periods=10)
         c_curve = pd.DataFrame({"Chloroplast Activity (%)": [80.5, 81.2, 83.4, 85.0, 84.1, 82.2, 81.5, 80.0, 79.4, 82.0]}, index=dates)
         st.area_chart(c_curve)
 
-elif active_tab == "🧪 Vegetation Indices":
+elif active_tab == ":material/science: Vegetation Indices":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">🧪 Vegetation Canopy Indices Matrix</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">science</span> Vegetation Canopy Indices Matrix</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Mathematical band ratios calculating chlorophyll proxies, canopy density, and vegetation greenness.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1477,10 +1494,10 @@ elif active_tab == "🧪 Vegetation Indices":
     else:
         st.markdown("<div class='agri-card'>Please upload a leaf specimen in the Crop Analysis panel first.</div>", unsafe_allow_html=True)
 
-elif active_tab == "🚨 Disease Detection":
+elif active_tab == ":material/shield_alert: Disease Detection":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">🚨 Pathogen Diagnostics & Severity Analysis</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">shield_alert</span> Pathogen Diagnostics & Severity Analysis</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Deep neural classification pinpointing leaf blights, chemical fungicides, and organic recipes.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1501,10 +1518,10 @@ elif active_tab == "🚨 Disease Detection":
     else:
         st.markdown("<div class='agri-card'>Please upload a leaf specimen in the Crop Analysis panel first.</div>", unsafe_allow_html=True)
 
-elif active_tab == "📈 Growth Analysis":
+elif active_tab == ":material/legend_toggle: Growth Analysis":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">📈 Crop Growth Lifecycle Timeline</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">legend_toggle</span> Crop Growth Lifecycle Timeline</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Chronological stage diagnostics and canopy nutrient tracking records.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1518,10 +1535,10 @@ elif active_tab == "📈 Growth Analysis":
     timeline_html = f'<div class="agri-card"><h4 style="margin-top:0; color:var(--primary-green); font-size:1.05rem; margin-bottom:12px;">Cronological Field Tracker</h4><div class="timeline-track"><div style="position:absolute; width:100%; height:2px; background:rgba(0,0,0,0.03); top:4px; z-index:1;"></div>{nodes_html}</div></div>'
     st.markdown(timeline_html, unsafe_allow_html=True)
 
-elif active_tab == "🧠 AI Explainability":
+elif active_tab == ":material/visibility: AI Explainability":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">🧠 Neural Focus Layer & Grad-CAM</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">visibility</span> Neural Focus Layer & Grad-CAM</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Interpret neural weights and pixel contributions determining diagnosed diseases.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1537,10 +1554,10 @@ elif active_tab == "🧠 AI Explainability":
 
 
 
-elif active_tab == "📋 Reports & Export":
+elif active_tab == ":material/article: Reports & Export":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">📋 Analytical Export Center</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">article</span> Analytical Export Center</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Compile crop diagnostics, NPK values, and indices into export formats.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1556,10 +1573,10 @@ elif active_tab == "📋 Reports & Export":
     else:
         st.markdown("<div class='agri-card'>Please upload a leaf specimen in the Crop Analysis panel first.</div>", unsafe_allow_html=True)
 
-elif active_tab == "📜 Diagnostic History":
+elif active_tab == ":material/history: Diagnostic History":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">📜 Diagnostic History Log</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">history</span> Diagnostic History Log</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Search, compare and review past crop health records.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -1589,19 +1606,19 @@ elif active_tab == "📜 Diagnostic History":
         </div>
         """, unsafe_allow_html=True)
 
-elif active_tab == "⚙️ Settings & Help":
+elif active_tab == ":material/settings: Settings & Help":
     st.markdown("""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;">⚙️ Calibration & Help Center</h2>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">settings</span> Calibration & Help Center</h2>
         <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Manage camera sensor calibration parameters and review AgriTech platform documentation.</p>
     </div>
     """, unsafe_allow_html=True)
     
-    st.markdown('<p class="section-header">🔧 Camera Calibrations</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header"><span class="material-symbols-outlined">build</span> Camera Calibrations</p>', unsafe_allow_html=True)
     st.slider("Foliar Brightness Threshold Offset", -5.0, 5.0, 0.0)
     st.slider("Color Balance Index Calibration", 0.5, 1.5, 1.0)
     
-    st.markdown('<p class="section-header">🤖 AI Diagnostics Specifications</p>', unsafe_allow_html=True)
+    st.markdown('<p class="section-header"><span class="material-symbols-outlined">memory</span> AI Diagnostics Specifications</p>', unsafe_allow_html=True)
     st.markdown("""
     - **Convolutional Regressor:** Custom CNN with global pooling, computing R² Photosynthetic efficiency (0.0 to 1.0) on 6 bands (RGB + VARI + ExG + MGRVI).
     - **Pathogen Classifier:** EfficientNet-B0 trained on PlantVillage & OLID dataset (Tomato & Snake Gourd specific classes).
