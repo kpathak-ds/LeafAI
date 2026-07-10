@@ -1,4 +1,4 @@
-# sensor_analytics.py - Smart Sensor Analytics Module
+# sensor_analytics.py - {t["sens_title"]} Module
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -291,14 +291,14 @@ def generate_pdf_report(moisture, ph, temp, humidity, light, soil_temp, ec, n, p
     buffer.seek(0)
     return buffer.getvalue()
 
-def render_sensor_analytics():
+def render_sensor_analytics(t):
     init_sensor_states()
     
     # Header Panel
-    st.markdown("""
+    st.markdown(f"""
     <div class="agri-card" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(46, 125, 50, 0.06) 0%, rgba(255, 255, 255, 0.8) 100%);">
-        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">sensors</span> Smart Sensor Analytics</h2>
-        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">Input real-time soil & environmental telemetry values to compute soil health indicators, evaluate fertility status, and compile dynamic AI recommendations.</p>
+        <h2 style="font-size: 2rem; font-weight: 700; color: var(--primary-green); margin: 0; font-family:'Space Grotesk',sans-serif;"><span class="material-symbols-outlined">sensors</span> {t["sens_title"]}</h2>
+        <p style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 6px;">{t["sens_desc"]}</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -306,7 +306,7 @@ def render_sensor_analytics():
     col_input, col_results = st.columns([1, 2], gap="large")
     
     with col_input:
-        st.markdown('<p class="section-header"><span class="material-symbols-outlined">settings_input_component</span> Input Panel</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="section-header"><span class="material-symbols-outlined">settings_input_component</span> {t["sens_input_panel"]}</p>', unsafe_allow_html=True)
         
         # Sub-card wrapper for form input
         with st.container(border=True):
@@ -319,7 +319,7 @@ def render_sensor_analytics():
             
             # Action Buttons Row
             st.markdown("<div style='margin-bottom:10px;'></div>", unsafe_allow_html=True)
-            if st.button("📡 Fetch via WiFi (Blynk IoT)", use_container_width=True):
+            if st.button(t["sens_fetch"], use_container_width=True):
                 with st.spinner("Connecting to IoT Sensors..."):
                     # Using V1 to V6 as standard pins for the 6 metrics
                     b_moist = get_blynk_data("V1")
@@ -351,7 +351,7 @@ def render_sensor_analytics():
 
             btn_col1, btn_col2 = st.columns(2)
             with btn_col1:
-                if st.button("Reset Parameters", use_container_width=True):
+                if st.button(t["sens_reset"], use_container_width=True):
                     st.session_state.sensor_moisture = 45.0
                     st.session_state.sensor_ph = 6.5
                     st.session_state.sensor_temp = 25.0
@@ -361,7 +361,7 @@ def render_sensor_analytics():
                     st.session_state.sensor_analyzed = False
                     st.rerun()
             with btn_col2:
-                if st.button("Analyze Telemetry", type="primary", use_container_width=True):
+                if st.button(t["sens_analyze"], type="primary", use_container_width=True):
                     # Save current input values into session state
                     st.session_state.sensor_moisture = moisture
                     st.session_state.sensor_ph = ph
@@ -373,15 +373,14 @@ def render_sensor_analytics():
                     st.rerun()
                     
     with col_results:
-        st.markdown('<p class="section-header"><span class="material-symbols-outlined">analytics</span> Telemetry & Recommendations Report</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="section-header"><span class="material-symbols-outlined">analytics</span> {t["sens_report"]}</p>', unsafe_allow_html=True)
         
         if not st.session_state.sensor_analyzed:
-            st.markdown(
-                """
+            st.markdown(f"""
                 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 350px; border: 2px dashed var(--border-color); border-radius: 16px; padding: 20px; text-align: center;">
                     <span class="material-symbols-outlined" style="font-size: 3.5rem; color: var(--text-secondary); margin-bottom: 12px;">device_thermostat</span>
-                    <h3 style="margin: 0; color: var(--text-primary); font-family: 'Space Grotesk', sans-serif;">Waiting for Telemetry Analysis</h3>
-                    <p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9rem; max-width: 380px;">Enter soil and climate sensor data in the left panel and click 'Analyze Telemetry' to compile diagnostics.</p>
+                    <h3 style="margin: 0; color: var(--text-primary); font-family: 'Space Grotesk', sans-serif;">{t["sens_wait"]}</h3>
+                    <p style="margin: 8px 0 0 0; color: var(--text-secondary); font-size: 0.9rem; max-width: 380px;">{t['sens_wait_desc']}</p>
                 </div>
                 """, 
                 unsafe_allow_html=True
@@ -448,7 +447,7 @@ def render_sensor_analytics():
                 # Add Predicted Crop Card
                 st.markdown(f"""
                 <div class="agri-card" style="margin-top: 15px; padding: 15px; text-align: center; border: 1px solid var(--primary-green); background: rgba(67, 160, 71, 0.05);">
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">AI Recommended Crop</div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">{t["sens_ai_rec"]}</div>
                     <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-green); margin-top: 5px;">🌱 {predicted_crop}</div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -457,7 +456,7 @@ def render_sensor_analytics():
                 # Sensor Summary Card
                 st.markdown(f"""
                 <div class="agri-card" style="padding: 15px; height: 100%;">
-                    <h4 style="margin: 0 0 12px 0; color: var(--text-primary); font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined" style="font-size:1.3rem;">input</span> Raw Sensor Telemetry</h4>
+                    <h4 style="margin: 0 0 12px 0; color: var(--text-primary); font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined" style="font-size:1.3rem;">input</span> {t["sens_raw"]}</h4>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 15px;">
                         <div>
                             <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Soil Moisture</div>
@@ -490,7 +489,7 @@ def render_sensor_analytics():
             st.markdown("<div style='margin-bottom:15px;'></div>", unsafe_allow_html=True)
             
             # ── SECTION 2: Calculated Nutrient Analysis
-            st.markdown('<h4 style="margin: 10px 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">science</span> Derived Nutrient Assays</h4>', unsafe_allow_html=True)
+            st.markdown(f'<h4 style="margin: 10px 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">science</span> {t["sens_derived"]}</h4>', unsafe_allow_html=True)
             
             nutr_cols = st.columns(5)
             nutr_list = [
@@ -518,7 +517,7 @@ def render_sensor_analytics():
             interp_c, risk_c = st.columns([1.5, 1], gap="medium")
             
             with interp_c:
-                st.markdown('<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">psychology</span> AI Diagnostic Interpretation</h4>', unsafe_allow_html=True)
+                st.markdown(f'<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">psychology</span> {t["sens_ai_interp"]}</h4>', unsafe_allow_html=True)
                 st.markdown(f"""
                 <div class="agri-card" style="padding: 15px; font-size:0.9rem; line-height: 1.5; color: var(--text-primary); border-left: 4px solid var(--primary-green);">
                     {interpretation}
@@ -526,7 +525,7 @@ def render_sensor_analytics():
                 """, unsafe_allow_html=True)
                 
             with risk_c:
-                st.markdown('<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">warning</span> Predictive Risk Profiles</h4>', unsafe_allow_html=True)
+                st.markdown(f'<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">warning</span> {t["sens_risk"]}</h4>', unsafe_allow_html=True)
                 
                 # Dynamic Risk calculations
                 n_def_risk = "High" if n_status == "Critical" else "Medium" if n_status == "Moderate" else "Low"
@@ -563,7 +562,7 @@ def render_sensor_analytics():
             st.markdown("<div style='margin-bottom:15px;'></div>", unsafe_allow_html=True)
             
             # ── SECTION 5: Recommendations Panel
-            st.markdown('<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">assignment_turned_in</span> Dynamic Field Directives</h4>', unsafe_allow_html=True)
+            st.markdown(f'<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">assignment_turned_in</span> {t["sens_directives"]}</h4>', unsafe_allow_html=True)
             rec_html = ""
             for r in recommendations:
                 rec_html += f"<li style='margin-bottom: 8px; font-size: 0.9rem; color: var(--text-primary); list-style-type: none; border-bottom: 1px solid var(--border-color); padding-bottom: 6px;'>{r}</li>"
@@ -578,7 +577,7 @@ def render_sensor_analytics():
             st.markdown("<div style='margin-bottom:15px;'></div>", unsafe_allow_html=True)
             
             # ── SECTION 7: Export Actions
-            st.markdown('<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">download</span> Export Diagnostic Data</h4>', unsafe_allow_html=True)
+            st.markdown(f'<h4 style="margin: 0 0 10px 0; color: var(--text-primary); font-family:\'Space Grotesk\',sans-serif; font-size:1.1rem; font-weight:700;"><span class="material-symbols-outlined">download</span> {t["sens_export"]}</h4>', unsafe_allow_html=True)
             
             exp_c1, exp_c2 = st.columns(2)
             
@@ -600,7 +599,7 @@ def render_sensor_analytics():
             
             with exp_c1:
                 st.download_button(
-                    label="📊 Download CSV Dataset",
+                    label=t["sens_down_csv"],
                     data=csv_bytes,
                     file_name="sensor_analytics_data.csv",
                     mime="text/csv",
@@ -608,7 +607,7 @@ def render_sensor_analytics():
                 )
             with exp_c2:
                 st.download_button(
-                    label="📄 Download PDF Diagnostic Report",
+                    label=t["sens_down_pdf"],
                     data=pdf_bytes,
                     file_name="sensor_analytics_report.pdf",
                     mime="application/pdf",
